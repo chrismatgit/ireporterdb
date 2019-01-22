@@ -77,3 +77,26 @@ class Validations:
                 'error': 'email already existed'
             }
         
+    @staticmethod
+    def check_if_user_exist(user_id): 
+        if not db.query_one(user_id):
+            return jsonify({
+            'status': 404,
+            'error': 'Please user does not exit or check your id'
+        }), 404
+
+class Login_validation:
+    '''Class handles all user validations when login'''
+    def exist_user_validation(self, username, password):
+        '''method that validate all the login input from the user'''
+        if not username or username == "" or not type(username) == str:
+            return {
+                'status': 400,
+                'error': 'Username field can not be left empty and should be a string'
+            }
+
+        if not password or password == "" or not type(password) == str:
+            return {
+                'status': 400,
+                'error': 'Password field can not be left empty and should be a string'
+            }
