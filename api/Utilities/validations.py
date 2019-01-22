@@ -62,6 +62,7 @@ class Validations:
         both :returns:
         a error message if true.
         '''
+        db = DatabaseConnection()
         username = db.check_username(username)
         email = db.check_email(email)
 

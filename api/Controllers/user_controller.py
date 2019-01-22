@@ -26,16 +26,15 @@ def signup():
         isadmin = data.get("isadmin")
 
         # validations
-        
         invalid_data = validator.user_validation(firstname, lastname, othernames, email, phone_number, username, password)
         invalid = validator.validate_signup(username, email)
-        # account = User(firstname, lastname, othernames, email, phone_number, username, password, registered)
         if invalid_data:
             return jsonify(invalid_data), 400
         if not invalid:
-            db.user_signup(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin)                        
+            new_user = db.user_signup(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin)         
             return jsonify({
                 "status": 201,
+                "data": new_user,
                 "message": f"{firstname} has been created successfuly"
             }), 201
                                     

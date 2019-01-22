@@ -46,9 +46,11 @@ class DatabaseConnection:
 
     def user_signup(self, firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin):
         '''Function to insert a user into users table'''
-        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin) VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}','{registered}', 'False');"
-        pprint(query)
+        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin) VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}','{registered}', 'False') RETURNING user_id,firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin;"
+        # pprint(query)
         self.cursor.execute(query)
+        user = self.cursor.fetchone()
+        return user
 
     def check_username(self, username):
         '''Function to check if there is a user with a username provided '''
