@@ -76,3 +76,30 @@ class DatabaseConnection:
         self.cursor.execute(query)
         user = self.cursor.fetchone()
         return user
+
+    def login(self, username):
+        '''Function to check if there is a user where the username matches'''
+        query = f"SELECT * FROM users WHERE username='{username}';"
+        pprint(query)
+        self.cursor.execute(query)
+        user = self.cursor.fetchone()
+        pprint(user)
+        return user
+
+    def query_all(self, table):
+        '''Function select all the user in the database'''
+        query = f"SELECT * FROM {table};"
+        pprint(query)
+        self.cursor.execute(query)
+        result = self.cursor.fetchall()
+        pprint(result)
+        return result
+
+    def query_one(self, incident_id):
+        '''Function select one user in the database'''
+        query = f"SELECT * FROM incidents WHERE incident_id = '{incident_id}';"
+        pprint(query)
+        self.cursor.execute(query)
+        incident= self.cursor.fetchall()
+        pprint(incident)
+        return incident

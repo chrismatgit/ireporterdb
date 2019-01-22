@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from db import DatabaseConnection
 from api.Models.Users import User
-from api.Utilities.validations import Validations
+from api.Utilities.validations import Validations, Login_validation
 from flask_jwt_extended import create_access_token
 import datetime
 
@@ -81,6 +81,51 @@ def admin_signup():
                                     
         return jsonify(invalid), 409
 
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong with your inputs'
+        }), 400
+
+def login():
+    '''Function allows a user to login after sign up
+    :returns:
+    a success message with the username and token
+    '''
+    try:
+        data = request.get_json()
+        username = data.get("username")
+        password = data.get("password")
+        validator = Login_validation()
+        invalid_data = validator.exist_user_validation(username, password)
+        if not db.query_all("user"):
+            return jsonify({
+                'status': 404,
+                'error': 'There is no user yet'
+            }), 404
+        if invalid_data:
+            return jsonify(invalid_data), 400   
+          
+        user = db.login(username)
+        if user != None:
+            if user["username"]== username and user["password"] == password:
+                expires = datetime.timedelta(days=1)
+                token = create_access_token(username, expires_delta=expires)
+                return jsonify({
+                    "status": 200,
+                    "token": token,
+                    "message": f"{username} successfuly login"
+                }), 200
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "Wrong username or password"
+                }), 400
+        else:
+            return jsonify({
+                "status": 400,
+                "error": "Wrong username or password"
+            }), 400
     except Exception:
         return jsonify({
             'status': 400,
