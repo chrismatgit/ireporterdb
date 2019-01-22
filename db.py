@@ -43,3 +43,25 @@ class DatabaseConnection:
             self.cursor.execute(create_incident_table)
         except:
             pprint('Failed to connect to the database')
+
+    def user_signup(self, firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin):
+        '''Function to insert a user into users table'''
+        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin) VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}','{registered}', 'False');"
+        pprint(query)
+        self.cursor.execute(query)
+
+    def check_username(self, username):
+        '''Function to check if there is a user with a username provided '''
+        query = f"SELECT * FROM users WHERE username='{username}';"
+        pprint(query)
+        self.cursor.execute(query)
+        user = self.cursor.fetchone()
+        return user
+
+    def check_email(self, email):
+        '''Function to check if there is a user with a email provided '''
+        query = f"SELECT * FROM users WHERE email='{email}';"
+        pprint(query)
+        self.cursor.execute(query)
+        user = self.cursor.fetchone()
+        return user
