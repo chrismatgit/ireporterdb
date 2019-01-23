@@ -472,6 +472,37 @@ class Test_Incident(BaseTest):
         )
         self.assertEqual(response.status_code, 404)
 
+    def test_get_all_incident(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "delivered",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+
+        response = self.tester.get(
+            '/api/v1/interventions/', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
+        )
+     
+        self.assertEqual(response.status_code, 200)
+
+
 
     def tearDown(self):
         self.db.drop_table('interventions')
