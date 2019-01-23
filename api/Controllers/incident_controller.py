@@ -105,3 +105,40 @@ def get_all_red_flags():
         'data': Incident.reports,
         'message': 'Red-flags Fetched'
     })
+
+
+def update_red_flag_loc(incident_id):
+    ''' Function enables the user to update a single red-flag record location
+    :param:
+    incident_id - holds integer value of the id of the individual red-flag to be updated
+    :returns:
+    A success message and the Details of the red-flag whose id matches the one entered and update the location if the incType equal red-flag.
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty()
+    not_exist = validator.check_if_red_flag_exist(incident_id)
+    if no_data:
+        return no_data 
+    if not_exist: 
+        return not_exist
+    try:
+        data = request.get_json()
+        location = data.get("location")
+        val = validator.validate_red_flag_location(location)
+        if val:
+            return jsonify(val), 400
+            
+        update_loc = db.update("incidents", "location", location, "incident_id", incident_id)
+        user_data=db.query_one(incident_id)
+        return jsonify({
+            'status': 200,
+            'id': update_loc['incident_id'],
+            'data': user_data,
+            'message': 'location updated successfully'
+        }), 200  
+
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong with your inputs or check your id in the URL'
+        }), 400

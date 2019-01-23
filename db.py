@@ -108,7 +108,16 @@ class DatabaseConnection:
         return incident
 
     def insert_incident(self, createdon, createdby, inctype, location, status, image, video,comment):
+        '''Function to insert a red-flag into incidents table'''
         query = f"INSERT INTO incidents(createdon, createdby, inctype, location, status, image, video,comment) VALUES ('{createdon}', '{createdby}', '{inctype}', '{location}', '{status}', '{image}', '{video}', '{comment}') RETURNING incident_id,createdon, createdby, inctype, location, status, image, video,comment;"
+        pprint(query)
+        self.cursor.execute(query)
+        incident = self.cursor.fetchone()
+        return incident
+
+    def update(self, table, column, new_value, cell, incident_id):
+        '''Function to update a record into incidents table'''
+        query = f"UPDATE {table} SET {column}='{new_value}' WHERE {cell}='{incident_id}' RETURNING incident_id;"
         pprint(query)
         self.cursor.execute(query)
         incident = self.cursor.fetchone()
