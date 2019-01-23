@@ -502,6 +502,107 @@ class Test_Incident(BaseTest):
      
         self.assertEqual(response.status_code, 200)
 
+    def test_update_location(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_location = { "location": [11212.63666, 578564.36]}
+
+        response = self.tester.patch(
+            '/api/v1/intervention/1/location', content_type='application/json',
+            data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["message"], "location updated successfully")
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_location_is_empty(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_location = { "location": ""}
+
+        response = self.tester.patch(
+            '/api/v1/intervention/1/location', content_type='application/json',
+            data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["error"], "location field can not be left empty and should be a list")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_location_is_not_string(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_location = { "location": {}}
+
+        response = self.tester.patch(
+            '/api/v1/intervention/1/location', content_type='application/json',
+            data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["error"], "location field can not be left empty and should be a list")
+        self.assertEqual(response.status_code, 400)
 
 
     def tearDown(self):

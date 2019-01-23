@@ -157,6 +157,14 @@ class DatabaseConnection:
         pprint(intervention)
         return intervention
 
+    def update_intervention(self, table, column, new_value, cell, intervention_id):
+        '''Function to update one record in interventions table of the database'''
+        query = f"UPDATE {table} SET {column}='{new_value}' WHERE {cell}='{intervention_id}' RETURNING intervention_id;"
+        pprint(query)
+        self.cursor.execute(query)
+        intervention = self.cursor.fetchone()
+        return intervention
+
     
     def drop_table(self, table_name):
         '''Function to delete a table'''
