@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)
+
 # iReporterdb
 
 
