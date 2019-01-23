@@ -2,7 +2,7 @@ from flask import Flask, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
-,update_red_flag_com, delete_red_flag
+,update_red_flag_com, delete_red_flag, update_red_flag_status
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -61,4 +61,17 @@ def update_red_flag_comment(incident_id):
 @jwt_required
 def delete_a_unique_redflag(incident_id):
     response = delete_red_flag(incident_id)
+    return response
+
+@bp.route('/red_flags/<int:incident_id>/status', methods=['PATCH'])
+@jwt_required
+def update_red_flag_stat(incident_id):
+    current_user=get_jwt_identity()
+    user_data = db.query_one_user(current_user)
+    if user_data['isadmin'] == False:
+        return jsonify({
+            "status": 401,
+            "error": "Non admin user are not allowed"
+        }) , 401 
+    response = update_red_flag_status(incident_id)
     return response

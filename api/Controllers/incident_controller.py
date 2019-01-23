@@ -207,3 +207,39 @@ def delete_red_flag(incident_id):
             'status': 404
         }), 404
         
+def update_red_flag_status(incident_id):
+    ''' Function enables a user to update a single red-flag record status
+    :param:
+    incident_id - holds integer value of the id of the individual red-flag to be updated
+    :returns:
+    the success message and the Details of the incident whose id matches the one entered to be updated.
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty()
+    not_exist = validator.check_if_red_flag_exist(incident_id)
+    if no_data:
+        return no_data 
+    if not_exist: 
+        return not_exist
+    try:
+        data = request.get_json()
+        status = data.get("status")
+        val = Incident_validation.validate_status(status)
+        if not val:
+            updated_incident= db.update("incidents", "status", status, "incident_id", incident_id)
+            user_data=db.query_one(incident_id)
+            return jsonify({
+                'status': 200,
+                'id': updated_incident['incident_id'],
+                'data': user_data,
+                'message': 'status updated successfully'
+            })
+        else:
+            return jsonify(val), 400
+        # else:
+        #     return jsonify(validator), 400
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong with your inputs or check your id in the URL'
+        }), 400

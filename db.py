@@ -63,6 +63,15 @@ class DatabaseConnection:
         user = self.cursor.fetchone()
         return user
 
+    def query_one_user(self, username):
+        '''Function to search a user into users table'''
+        query = f"SELECT * FROM users WHERE username = '{username}';"
+        pprint(query)
+        self.cursor.execute(query)
+        user= self.cursor.fetchone()
+        pprint(user)
+        return user
+
 
     def check_username(self, username):
         '''Function to check if there is a user with a username provided '''
