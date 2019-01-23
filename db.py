@@ -139,3 +139,8 @@ class DatabaseConnection:
         self.cursor.execute(query)
         incident = self.cursor.fetchone()
         return incident
+    
+    def drop_table(self, table_name):
+        '''Function to delete a table'''
+        drop = f"DROP TABLE {table_name};"
+        self.cursor.execute(drop)
