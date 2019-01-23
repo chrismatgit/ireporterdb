@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from api.Controllers.user_controller import signup, admin_signup, login
+from api.Controllers.incident_controller import create_incident
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -23,4 +24,10 @@ def admin_user_signup():
 @bp.route('/login/', methods=['POST']) 
 def user_login():
     response = login()
+    return response
+
+@bp.route('/red_flag/', methods=['POST'])
+@jwt_required
+def create_report():
+    response = create_incident()
     return response
