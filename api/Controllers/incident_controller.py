@@ -76,3 +76,32 @@ def get_unique_red_flag(incident_id):
             'error': 'Something went wrong'
         }), 400
 
+def get_all_red_flags():
+    ''' Function enables the view of all the red-flag
+    :returns:
+    A list of all the red-flag created
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty()
+    if no_data:
+        return no_data 
+    incidents = db.query_all("incidents")
+    for incident in incidents:
+        incident_dict = {
+            "incident_id": incident["incident_id"],
+            "createdon": incident["createdon"],
+            "createdby": incident["createdby"],
+            "inctype": incident["inctype"],
+            "location": incident["location"],
+            "status": incident["status"],
+            "image": incident["image"],
+            "video": incident["video"],
+            "comment": incident["comment"]
+        }
+        Incident.reports.append(incident_dict)
+
+    return jsonify({
+        'status': 200,
+        'data': Incident.reports,
+        'message': 'Red-flags Fetched'
+    })
