@@ -41,6 +41,9 @@ class DatabaseConnection:
 
             create_incident_table = "CREATE TABLE IF NOT EXISTS incidents (incident_id SERIAL NOT NULL PRIMARY KEY,createdOn TEXT NOT NULL, createdBy TEXT NOT NULL, incType TEXT NOT NULL, location TEXT NOT NULL, status TEXT NOT NULL, image TEXT NOT NULL, video TEXT NOT NULL, comment TEXT NOT NULL);"
             self.cursor.execute(create_incident_table)
+
+            create_intervention_table = "CREATE TABLE IF NOT EXISTS interventions (intervention_id SERIAL NOT NULL PRIMARY KEY,createdOn TEXT NOT NULL, createdBy TEXT NOT NULL, incType TEXT NOT NULL, location TEXT NOT NULL, status TEXT NOT NULL, image TEXT NOT NULL, video TEXT NOT NULL, comment TEXT NOT NULL);"
+            self.cursor.execute(create_intervention_table)
         except:
             pprint('Failed to connect to the database')
 
@@ -102,4 +105,11 @@ class DatabaseConnection:
         self.cursor.execute(query)
         incident= self.cursor.fetchall()
         pprint(incident)
+        return incident
+
+    def insert_incident(self, createdon, createdby, inctype, location, status, image, video,comment):
+        query = f"INSERT INTO incidents(createdon, createdby, inctype, location, status, image, video,comment) VALUES ('{createdon}', '{createdby}', '{inctype}', '{location}', '{status}', '{image}', '{video}', '{comment}') RETURNING incident_id,createdon, createdby, inctype, location, status, image, video,comment;"
+        pprint(query)
+        self.cursor.execute(query)
+        incident = self.cursor.fetchone()
         return incident

@@ -100,3 +100,115 @@ class Login_validation:
                 'status': 400,
                 'error': 'Password field can not be left empty and should be a string'
             }
+
+class Incident_validation:
+    '''Class handles all incident validations'''
+    def add_incident_validation(self, createdby,location, status, image, video, comment):
+        '''Method that validate all the incident input from the user'''
+        # if not createdby or not isinstance(createdby, int):
+        if not createdby or not isinstance(createdby, int):
+            return {
+                'status': 400,
+                'error': 'createdby field can not be left empty and should be an integer'
+                }
+    
+        if not location or location =="" or not isinstance(location, list) or not len(location)==2 or not isinstance(location[0], float)\
+         or not isinstance(location[1], float):
+            return {
+                'status': 400,
+                'error': 'location field can not be left empty and should be a list'
+            }
+        
+        if not comment or not isinstance(comment, str) :
+            return {
+                'status': 400,
+                'error': 'comment field can not be left empty and should be a string'
+            }
+    
+        # if not status or status == "" or not status == "delivered" or not isinstance(status, str):
+        #     return {
+        #         'status': 400,
+        #         'error':'status field can not be left empty, it should be delivered and must be a string'
+        #     }
+        
+        extensions = [".jpg", ".png"]
+        details = os.path.splitext(image)
+        if details[1] not in extensions:
+            return {
+                'status': 400,
+                'error': 'image has an invalid format(eg: image.png  or image.jpg'
+            }
+
+        extensions = [".mp4", ".avi"]
+        details = os.path.splitext(video)
+        if details[1] not in extensions:
+            return {
+                'status': 400,
+                'error': 'video has an invalid format(eg: video.mp4  or video.avi)'
+            }
+
+    @staticmethod
+    def check_if_empty():
+        if not db.query_all("incidents"):
+            return jsonify({
+                'status': 404,
+                'error': 'There is no incident yet'
+            }), 404
+            
+    @staticmethod
+    def check_if_red_flag_exist(incident_id): 
+        if not db.query_one(incident_id):
+            return jsonify({
+            'status': 404,
+            'error': 'Please red-flag does not exit or check your id'
+        }), 404
+
+    @staticmethod
+    def check_if_intervention_exist(intervention_id): 
+        if not db.query_one(intervention_id):
+            return jsonify({
+            'status': 404,
+            'error': 'Please intervention does not exit or check your id'
+        }), 404
+
+    @staticmethod
+    def validate_red_flag_inctype(inctype):
+        if not inctype or inctype == "" or not inctype == "red-flag" or not isinstance(inctype, str):
+            return {
+                'status': 400,
+                'error': 'incType field can not be left empty, it should be eg: red-flag should be a string'
+            }
+
+    @staticmethod
+    def validate_intervention_type(inctype):
+        if not inctype or inctype == "" or not inctype == "intervention" or not isinstance(inctype, str):
+            return {
+                'status': 400,
+                'error': 'incType field can not be left empty, it should be eg: intervention should be a string'
+            }
+
+    @staticmethod
+    def validate_red_flag_comment(comment):
+        if not comment or comment == "" or not isinstance(comment, str) :
+            return {
+                'status': 400,
+                'error': 'comment field can not be left empty and should be a string'
+            }
+            
+    @staticmethod
+    def validate_red_flag_location(location):
+        if not location or location == "" or not isinstance(location, list) \
+        or not len(location)==2 or not isinstance(location[0], float) or not isinstance(location[1], float):
+            return {
+                'status': 400,
+                'error': 'location field can not be left empty and should be a list'
+            }
+
+    @staticmethod
+    def validate_status(status):
+        if not status or status == "" or not status == "under_investigation" and not status== "rejected"\
+            and not status=="resolved" or not isinstance(status, str):
+            return {
+                'status': 400,
+                'error':'status field can not be left empty, it should be eg: resolved, under_investigation or rejected and should be a string'
+            }
