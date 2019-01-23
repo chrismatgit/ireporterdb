@@ -47,3 +47,30 @@ def create_intervention():
             'status': 400,
             'error': 'Something went wrong with your inputs'
         }), 400
+
+def get_unique_intervention(intervention_id):
+    ''' Function enables the user to get a single intervention record
+    :param:
+    incident_id - holds integer value of the id of the individual red-flag 
+    :returns:
+    A success message and the Details of the red-flag whose id matches the one entered 
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty_intervention()
+    not_exist = validator.check_if_intervention_exist(intervention_id)
+    if no_data:
+        return no_data 
+    if not_exist: 
+        return not_exist
+    try:
+        interv = db.query_one_intervention(intervention_id)
+        return jsonify({
+            'status': 200,
+            'data': interv,
+            'message': 'Intervention Fetched'
+            }), 200
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong'
+        }), 400

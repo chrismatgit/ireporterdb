@@ -154,6 +154,14 @@ class Incident_validation:
                 'status': 404,
                 'error': 'There is no incident yet'
             }), 404
+    
+    @staticmethod
+    def check_if_empty_intervention():
+        if not db.query_all("interventions"):
+            return jsonify({
+                'status': 404,
+                'error': 'There is no incident yet'
+            }), 404
             
     @staticmethod
     def check_if_red_flag_exist(incident_id): 
@@ -165,7 +173,7 @@ class Incident_validation:
 
     @staticmethod
     def check_if_intervention_exist(intervention_id): 
-        if not db.query_one(intervention_id):
+        if not db.query_one_intervention(intervention_id):
             return jsonify({
             'status': 404,
             'error': 'Please intervention does not exit or check your id'
