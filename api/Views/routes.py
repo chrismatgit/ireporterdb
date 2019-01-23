@@ -2,7 +2,7 @@ from flask import Flask, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
-,update_red_flag_com
+,update_red_flag_com, delete_red_flag
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -55,4 +55,10 @@ def update_red_flag_location(incident_id):
 @jwt_required
 def update_red_flag_comment(incident_id):
     response = update_red_flag_com(incident_id)
+    return response
+
+@bp.route('/red_flags/<int:incident_id>', methods=['DELETE'])
+@jwt_required
+def delete_a_unique_redflag(incident_id):
+    response = delete_red_flag(incident_id)
     return response
