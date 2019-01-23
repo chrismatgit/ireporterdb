@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=test)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=test)           [![Maintainability](https://api.codeclimate.com/v1/badges/7b9d7da2259084c82395/maintainability)](https://codeclimate.com/github/chrismatgit/ireporterdb/maintainability)
+[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=develop)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=test)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=test)           [![Maintainability](https://api.codeclimate.com/v1/badges/7b9d7da2259084c82395/maintainability)](https://codeclimate.com/github/chrismatgit/ireporterdb/maintainability)
 
 
 # iReporterdb

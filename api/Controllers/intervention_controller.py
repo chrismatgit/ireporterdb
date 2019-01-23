@@ -74,3 +74,33 @@ def get_unique_intervention(intervention_id):
             'status': 400,
             'error': 'Something went wrong'
         }), 400
+
+def get_all_interventions():
+    ''' Function enables the view of all the interventions
+    :returns:
+    A list of all the interventions created
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty_intervention()
+    if no_data:
+        return no_data 
+    interventions = db.query_all("interventions")
+    for intervention in interventions:
+        intervention_dict = {
+            "intervention_id": intervention["intervention_id"],
+            "createdon": intervention["createdon"],
+            "createdby": intervention["createdby"],
+            "inctype": intervention["inctype"],
+            "location": intervention["location"],
+            "status": intervention["status"],
+            "image": intervention["image"],
+            "video": intervention["video"],
+            "comment": intervention["comment"]
+        }
+        Intervention.reports.append(intervention_dict)
+
+    return jsonify({
+        'status': 200,
+        'data': Intervention.reports,
+        'message': 'Interventions Fetched'
+    })
