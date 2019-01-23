@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from api.Utilities.validations import Incident_validation
 from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
+from api.Controllers.intervention_controller import create_intervention
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -74,4 +76,12 @@ def update_red_flag_stat(incident_id):
             "error": "Non admin user are not allowed"
         }) , 401 
     response = update_red_flag_status(incident_id)
+    return response
+
+####################interventions routes######################
+
+@bp.route('/intervention/', methods=['POST'])
+@jwt_required
+def create_int():
+    response = create_intervention()
     return response

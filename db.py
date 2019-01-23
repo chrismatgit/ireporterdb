@@ -139,6 +139,15 @@ class DatabaseConnection:
         self.cursor.execute(query)
         incident = self.cursor.fetchone()
         return incident
+
+    def insert_intervention(self, createdon, createdby, inctype, location, status, image, video,comment):
+        '''Function to create a intervention record into interventions table'''
+        query = f"INSERT INTO interventions(createdon, createdby, inctype, location, status, image, video,comment) VALUES ('{createdon}', '{createdby}', '{inctype}', '{location}', '{status}', '{image}', '{video}', '{comment}') RETURNING intervention_id,createdon, createdby, inctype, location, status, image, video,comment;"
+        pprint(query)
+        self.cursor.execute(query)
+        incident = self.cursor.fetchone()
+        return incident
+
     
     def drop_table(self, table_name):
         '''Function to delete a table'''
