@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)
+[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg)](https://coveralls.io/github/chrismatgit/ireporterdb)
+
 
 # iReporterdb
 
