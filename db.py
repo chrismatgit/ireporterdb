@@ -148,6 +148,15 @@ class DatabaseConnection:
         incident = self.cursor.fetchone()
         return incident
 
+    def query_one_intervention(self, intervention_id):
+        '''Function select one intervention in the database'''
+        query = f"SELECT * FROM interventions WHERE intervention_id = '{intervention_id}';"
+        pprint(query)
+        self.cursor.execute(query)
+        intervention= self.cursor.fetchone()
+        pprint(intervention)
+        return intervention
+
     
     def drop_table(self, table_name):
         '''Function to delete a table'''

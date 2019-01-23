@@ -4,7 +4,7 @@ from api.Utilities.validations import Incident_validation
 from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
-from api.Controllers.intervention_controller import create_intervention
+from api.Controllers.intervention_controller import create_intervention, get_unique_intervention
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -84,4 +84,10 @@ def update_red_flag_stat(incident_id):
 @jwt_required
 def create_int():
     response = create_intervention()
+    return response
+
+@bp.route('/intervention/<int:intervention_id>', methods=['GET'])
+@jwt_required
+def get_intervention(intervention_id):
+    response = get_unique_intervention(intervention_id)
     return response

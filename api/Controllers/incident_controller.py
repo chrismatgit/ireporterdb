@@ -50,7 +50,7 @@ def create_incident():
         }), 400
 
 def get_unique_red_flag(incident_id):
-    ''' Function enables the user to update a single red-flag record
+    ''' Function enables the user to get a single red-flag record
     :param:
     incident_id - holds integer value of the id of the individual red-flag 
     :returns:

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=test)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=test)
+[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=test)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=test)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=test)           [![Maintainability](https://api.codeclimate.com/v1/badges/7b9d7da2259084c82395/maintainability)](https://codeclimate.com/github/chrismatgit/ireporterdb/maintainability)
 
 
 # iReporterdb
@@ -61,7 +61,7 @@ Install pytest, source the .env file, run the tests.
   ```
 ## Deployment
 
-The Python application is hosted on [Heroku](https://irepoter.herokuapp.com/api/v1/)
+The Python application is hosted on [Heroku](https://ireporterdbc.herokuapp.com/api/v1/)
 
 
 ## Tools Used

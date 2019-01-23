@@ -381,79 +381,6 @@ class Test_Incident(BaseTest):
         self.assertIn("incType field can not be left empty, it should be eg: intervention should be a string", reply['error'])
         self.assertEqual(response.status_code, 400)
 
-
-
-
-# #     def test_status_is_not_a_string(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": False,
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("status field can not be left empty, it should be eg: delivered, resolved, under_investigation or rejected                 and should be a string", reply['error'])
-# #         self.assertEqual(response.status_code, 400)
-
-# #     def test_status_is_empty(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": "",
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("status field can not be left empty, it should be eg: delivered, resolved, under_investigation or rejected                 and should be a string", reply['error'])
-# #         self.assertEqual(response.status_code, 400)
-
-    
-# #     def test_status_is_string_but_invalid(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": "late",
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("status field can not be left empty, it should be eg: delivered, resolved, under_investigation or rejected                 and should be a string", reply['error'])
-# #         self.assertEqual(response.status_code, 400)
-
     def test_status_is_delivered(self):
         reply = self.login_user()
         token = reply['token']
@@ -474,476 +401,76 @@ class Test_Incident(BaseTest):
         )
         reply = json.loads(response.data.decode())
      
-        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertIn("intervention has been created successfuly", reply['message'])
         self.assertEqual(response.status_code, 201)
 
+    
+    def test_get_unique_incident(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "delivered",
+            "video": "video.avi"
+        }
 
-# #     def test_status_is_under_investigation(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": "under_investigation",
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("red-flag has been created successfuly", reply['message'])
-# #         self.assertEqual(response.status_code, 201)
-
-
-# #     def test_status_is_rejected(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": "rejected",
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("red-flag has been created successfuly", reply['message'])
-# #         self.assertEqual(response.status_code, 201)
-
-# #     def test_status_is_resolved(self):
-# #         reply = self.login_user()
-# #         token = reply['token']
-# #         report = {
-# #             "comment": "No comment",
-# #             "createdby": 1,
-# #             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-# #             "image": "img.jpg",
-# #             "inctype": "intervention",
-# #             "location": [12112.01,12122.454],
-# #             "status": "resolved",
-# #             "video": "video.avi"
-# #         }
-
-# #         response = self.tester.post(
-# #             '/api/v1/intervention/', content_type='application/json',
-# #             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-# #         )
-# #         reply = json.loads(response.data.decode())
-# #      
-# #         self.assertIn("red-flag has been created successfuly", reply['message'])
-# #         self.assertEqual(response.status_code, 201)
-
-#     def test_get_all_incident(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "delivered",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
      
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
 
-
-#         response = self.tester.get(
-#             '/api/v1/red_flags/', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
+        response = self.tester.get(
+            '/api/v1/intervention/1', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
+        )
      
-#         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
-#     def test_no_incident(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         response = self.tester.get(
-#             '/api/v1/red_flags/', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
-#         self.assertEqual(response.status_code, 404)
+    def test_inexisted_id(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "delivered",
+            "video": "video.avi"
+        }
 
-
-#     def test_get_unique_incident(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
      
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
 
-#         response = self.tester.get(
-#             '/api/v1/intervention/1', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
+        response = self.tester.get(
+            '/api/v1/intervention/122', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
+        )
      
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_invalid_id(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         response = self.tester.get(
-#             '/api/v1/intervention/122', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
-     
-#         self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 404)
 
 
-#     def test_no_incident_yet(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         response = self.tester.get(
-#             '/api/v1/intervention/1', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
-#         self.assertEqual(response.status_code, 404)
-
-
-#     def test_update_location(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_location = { "location": [11212.63666, 578564.36]}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/location', content_type='application/json',
-#             data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["message"], "location updated successfully")
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_update_location_is_empty(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_location = { "location": ""}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/location', content_type='application/json',
-#             data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["error"], "location field can not be left empty and should be a list")
-#         self.assertEqual(response.status_code, 400)
-
-#     def test_update_location_is_not_string(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_location = { "location": {}}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/location', content_type='application/json',
-#             data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["error"], "location field can not be left empty and should be a list")
-#         self.assertEqual(response.status_code, 400)
-
-#     def test_update_comment(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_comment = { "comment": "Rejected red-flag"}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/comment', content_type='application/json',
-#             data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["message"], "comment updated successfully")
-#         self.assertEqual(response.status_code, 200)
-
-#     def test_no_incident_for_comment(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/comment', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
-#         self.assertEqual(response.status_code, 404)
-
-#     def test_update_comment_is_empty(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_comment = { "comment": ""}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/comment', content_type='application/json',
-#             data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
-#         self.assertEqual(response.status_code, 400)
-
-#     def test_update_comment_is_not_string(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_comment = { "comment": False}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/comment', content_type='application/json',
-#             data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
-#         self.assertEqual(response.status_code, 400)
-
-
-#     def test_change_status(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "delivered",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         update_status = { "status": "review"}
-
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/status', content_type='application/json',
-#             data = json.dumps(update_status), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["error"], "status field can not be left empty, it should be eg: resolved, under_investigation or rejected and should be a string")
-#         self.assertEqual(response.status_code, 400)
-
-
-#     def test_update_comment_when_no_red_flag(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         response = self.tester.patch(
-#             '/api/v1/red_flags/1/comment', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
-#         )
-#         self.assertEqual(response.status_code, 404)
-
-#     def test_delete_a_redflag(self):
-#         reply = self.login_user()
-#         token = reply['token']
-#         report = {
-#             "comment": "No comment",
-#             "createdby": 1,
-#             "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
-#             "image": "img.jpg",
-#             "inctype": "intervention",
-#             "location": [12112.01,12122.454],
-#             "status": "under_investigation",
-#             "video": "video.avi"
-#         }
-
-#         response = self.tester.post(
-#             '/api/v1/intervention/', content_type='application/json',
-#             data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn("red-flag has been created successfuly", reply['message'])
-#         self.assertEqual(response.status_code, 201)
-
-#         response = self.tester.delete(
-#             '/api/v1/red_flags/1', content_type='application/json',
-#             data = json.dumps(report), headers = {'Authorization':f'Bearer {token}'}
-#         )
-#         reply = json.loads(response.data.decode())
-     
-#         self.assertIn(reply["message"], "incident deleted")
-#         self.assertEqual(response.status_code, 200)
-
-
+    def test_no_incident_yet(self):
+        reply = self.login_user()
+        token = reply['token']
+        response = self.tester.get(
+            '/api/v1/intervention/1', content_type='application/json', headers={'Authorization': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, 404)
 
 
     def tearDown(self):
