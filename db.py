@@ -122,3 +122,11 @@ class DatabaseConnection:
         self.cursor.execute(query)
         incident = self.cursor.fetchone()
         return incident
+
+    def delete(self, table, cell, incident_id):
+        '''Function to delete a record into incidents table'''
+        query = f"DELETE FROM {table} WHERE {cell} = '{incident_id}'RETURNING incident_id;"
+        pprint(query)
+        self.cursor.execute(query)
+        incident = self.cursor.fetchone()
+        return incident
