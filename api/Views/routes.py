@@ -5,7 +5,7 @@ from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
 from api.Controllers.intervention_controller import create_intervention, get_unique_intervention, get_all_interventions, \
-update_intervention_loc
+update_intervention_loc, update_intervention_com
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -103,4 +103,10 @@ def get_interventions():
 @jwt_required
 def update_interv_location(intervention_id):
     response = update_intervention_loc(intervention_id)
+    return response
+
+@bp.route('/intervention/<int:intervention_id>/comment', methods=['PATCH'])
+@jwt_required
+def update_interv_comment(intervention_id):
+    response = update_intervention_com(intervention_id)
     return response

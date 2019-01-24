@@ -604,6 +604,74 @@ class Test_Incident(BaseTest):
         self.assertIn(reply["error"], "location field can not be left empty and should be a list")
         self.assertEqual(response.status_code, 400)
 
+    def test_update_comment_is_empty(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_comment = { "comment": ""}
+
+        response = self.tester.patch(
+            '/api/v1/intervention/1/comment', content_type='application/json',
+            data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_comment_is_not_string(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_comment = { "comment": False}
+
+        response = self.tester.patch(
+            '/api/v1/intervention/1/comment', content_type='application/json',
+            data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
+        self.assertEqual(response.status_code, 400)
+
 
     def tearDown(self):
         self.db.drop_table('interventions')

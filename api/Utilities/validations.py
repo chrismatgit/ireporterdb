@@ -22,10 +22,10 @@ class Validations:
                 'error': 'Lastname field can not be left empty and should be a string'
             }
         
-        if not othernames or othernames == "" or not type(othernames) == str:
+        if not othernames or not type(othernames) == str:
             return {
                 'status': 400,
-                'error': 'othernames field can not be left empty and should be a string'
+                'error': 'othernames field should be a string'
             }
      
         if not email or not type(email) == str or email == "" or \
