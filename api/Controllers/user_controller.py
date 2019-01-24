@@ -14,7 +14,6 @@ def signup():
     '''
     try:
         data = request.get_json()
-        # user_id = len(User.accounts)+1
         firstname = data.get("firstname")
         lastname = data.get("lastname")
         othernames = data.get("othernames")
@@ -22,16 +21,18 @@ def signup():
         phone_number = data.get("phone_number")
         username = data.get("username")
         password = data.get("password")
-        registered = data.get("registered")
         isadmin = data.get("isadmin")
 
         # validations
-        invalid_data = validator.user_validation(firstname, lastname, othernames, email, phone_number, username, password)
+        validator = Validations()
+        invalid_data = validator.user_validation(firstname, lastname, \
+        othernames, email, phone_number, username, password)
         invalid = validator.validate_signup(username, email)
         if invalid_data:
             return jsonify(invalid_data), 400
         if not invalid:
-            new_user = db.user_signup(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin)         
+            new_user = db.user_signup(firstname, lastname, othernames, email, phone_number, \
+            username, password, isadmin)         
             return jsonify({
                 "status": 201,
                 "data": new_user,
@@ -54,7 +55,6 @@ def admin_signup():
     '''
     try:
         data = request.get_json()
-        # user_id = len(User.accounts)+1
         firstname = data.get("firstname")
         lastname = data.get("lastname")
         othernames = data.get("othernames")
@@ -62,7 +62,6 @@ def admin_signup():
         phone_number = data.get("phone_number")
         username = data.get("username")
         password = data.get("password")
-        registered = data.get("registered")
         isadmin = data.get("isadmin")
 
         # validations
@@ -72,15 +71,13 @@ def admin_signup():
         if invalid_data:
             return jsonify(invalid_data), 400
         if not invalid:
-            new_user = db.admin_signup(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin)         
+            new_user = db.admin_signup(firstname, lastname, othernames, email, phone_number, username, password, isadmin)         
             return jsonify({
                 "status": 201,
                 "data": new_user,
                 "message": f"{firstname} has been created successfuly"
-            }), 201
-                                    
+            }), 201                          
         return jsonify(invalid), 409
-
     except Exception:
         return jsonify({
             'status': 400,
@@ -104,13 +101,13 @@ def login():
                 'error': 'There is no user yet'
             }), 404
         if invalid_data:
-            return jsonify(invalid_data), 400   
-          
+            return jsonify(invalid_data), 400
         user = db.login(username)
         if user != None:
             if user["username"]== username and user["password"] == password:
+                user_id = user["user_id"]
                 expires = datetime.timedelta(days=1)
-                token = create_access_token(username, expires_delta=expires)
+                token = create_access_token(user_id, expires_delta=expires)
                 return jsonify({
                     "status": 200,
                     "token": token,
@@ -136,36 +133,29 @@ def get_all_users():
     ''' Function enables the view of all the users
     :returns:
     A list of all the account created
-    '''
-    try: 
-        if not db.query_all("users"):
-            return jsonify({
-                'status': 404,
-                'error': 'There are no user yet'
-            }), 404
-        accounts = db.query_all("users")
-        for account in accounts:
-            account_dict = {
-                "user_id": account["user_id"],
-                "firstname": account["firstname"],
-                "lastname": account["lastname"],
-                "othernames": account["othernames"],
-                "email": account["email"],
-                "phone_number": account["phone_number"],
-                "username": account["username"],
-                "password": account["password"],
-                "registered": account["registered"],
-                "isadmin": account["isadmin"]
-            }
-            User.accounts.append(account_dict)
+    ''' 
+    if not db.query_all("users"):
         return jsonify({
-            'status': 200,
-            'Data': User.accounts,
-            'message': 'Accounts fetched'
-        }), 200
-
-    except Exception:
-        return jsonify({
-            'status': 400,
-            'error': 'something went wrong'
-        }), 400
+            'status': 404,
+            'error': 'There are no user yet'
+        }), 404
+    accounts = db.query_all("users")
+    for account in accounts:
+        account_dict = {
+            "user_id": account["user_id"],
+            "firstname": account["firstname"],
+            "lastname": account["lastname"],
+            "othernames": account["othernames"],
+            "email": account["email"],
+            "phone_number": account["phone_number"],
+            "username": account["username"],
+            "password": account["password"],
+            "registered": account["registered"],
+            "isadmin": account["isadmin"]
+        }
+        User.accounts.append(account_dict)
+    return jsonify({
+        'status': 200,
+        'Data': User.accounts,
+        'message': 'Accounts fetched'
+    }), 200

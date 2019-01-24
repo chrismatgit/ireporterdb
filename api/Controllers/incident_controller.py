@@ -3,33 +3,30 @@ from flask import Flask, jsonify, request
 from db import DatabaseConnection
 from api.Models.Incidents import Incident
 from api.Utilities.validations import Incident_validation
-# from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity
 import datetime
 
 db = DatabaseConnection()
 
-def create_incident():
-    '''Function creates a new incident to the database
+def create_red_flag():
+    '''Function creates a new red-flag to the database
     :returns:
-    a success message and the incident.
+    a success message and the red-flag.
     '''
     try:
-        # current_user = get_jwt_identity()
+        current_user = get_jwt_identity()
         data = request.get_json()
-        #incident_id = len(Incident.reports)+1
         createdon = datetime.datetime.now()
-        # createdby = current_user
-        createdby = data.get("createdby")
+        createdby = current_user
         inctype = data.get("inctype")
         location = data.get("location")
         status = "delivered"
         image = data.get("image")
         video = data.get("video")
         comment = data.get("comment")
-
         # validation
         validator = Incident_validation()
-        invalid_data = validator.add_incident_validation(createdby,location,status,image,video,comment)
+        invalid_data = validator.add_incident_validation(location,status,image,video,comment)
         invalid_status = validator.validate_red_flag_inctype(inctype)
         if invalid_status:
             return jsonify(invalid_status), 400
@@ -63,18 +60,12 @@ def get_unique_red_flag(incident_id):
         return no_data 
     if not_exist: 
         return not_exist
-    try:
-        incident = db.query_one(incident_id)
-        return jsonify({
-            'status': 200,
-            'data': incident,
-            'message': 'Red-Flag Fetched'
-            }), 200
-    except Exception:
-        return jsonify({
-            'status': 400,
-            'error': 'Something went wrong'
-        }), 400
+    incident = db.query_one(incident_id)
+    return jsonify({
+        'status': 200,
+        'data': incident,
+        'message': 'Red-Flag Fetched'
+        }), 200
 
 def get_all_red_flags():
     ''' Function enables the view of all the red-flag
@@ -114,14 +105,15 @@ def update_red_flag_loc(incident_id):
     :returns:
     A success message and the Details of the red-flag whose id matches the one entered and update the location if the incType equal red-flag.
     '''
-    validator = Incident_validation()
-    no_data = validator.check_if_empty()
-    not_exist = validator.check_if_red_flag_exist(incident_id)
-    if no_data:
-        return no_data 
-    if not_exist: 
-        return not_exist
+    
     try:
+        validator = Incident_validation()
+        no_data = validator.check_if_empty()
+        not_exist = validator.check_if_red_flag_exist(incident_id)
+        if no_data:
+            return no_data 
+        if not_exist: 
+            return not_exist
         data = request.get_json()
         location = data.get("location")
         val = validator.validate_red_flag_location(location)
@@ -150,14 +142,15 @@ def update_red_flag_com(incident_id):
     :returns:
     A success message and the Details of the red-flag whose id matches the one entered and update the comment if the incType equal red-flag.
     '''
-    validator = Incident_validation()
-    no_data = validator.check_if_empty()
-    not_exist = validator.check_if_red_flag_exist(incident_id)
-    if no_data:
-        return no_data 
-    if not_exist: 
-        return not_exist
     try:
+        validator = Incident_validation()
+        no_data = validator.check_if_empty()
+        not_exist = validator.check_if_red_flag_exist(incident_id)
+        if no_data:
+            return no_data 
+        if not_exist: 
+            return not_exist
+    
         data = request.get_json()
         comment = data.get("comment")
         val = Incident_validation.validate_red_flag_comment(comment)
@@ -214,14 +207,15 @@ def update_red_flag_status(incident_id):
     :returns:
     the success message and the Details of the incident whose id matches the one entered to be updated.
     '''
-    validator = Incident_validation()
-    no_data = validator.check_if_empty()
-    not_exist = validator.check_if_red_flag_exist(incident_id)
-    if no_data:
-        return no_data 
-    if not_exist: 
-        return not_exist
     try:
+        validator = Incident_validation()
+        no_data = validator.check_if_empty()
+        not_exist = validator.check_if_red_flag_exist(incident_id)
+        if no_data:
+            return no_data 
+        if not_exist: 
+            return not_exist
+    
         data = request.get_json()
         status = data.get("status")
         val = Incident_validation.validate_status(status)

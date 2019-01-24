@@ -15,38 +15,47 @@ class Validations:
                 'status': 400,
                 'error': 'Firstname field can not be left empty and should be a string'
             }
-
-        if not lastname or lastname == "" or not type(lastname) == str:
+        if not re.match(r"^([a-zA-Z\d]+[-_])*[a-zA-Z\d*]+$", firstname) or len(firstname)>20:
+            return {
+                'status': 400,
+                'error': 'Firstname cannot be integers,have white spaces or symbols and less than 20 characters'
+            }  
+        if not lastname or lastname == "" or not type(lastname) == str :
             return {
                 'status': 400,
                 'error': 'Lastname field can not be left empty and should be a string'
             }
-        
+        if not re.match(r"^([a-zA-Z\d]+[-_])*[a-zA-Z\d*]+$", lastname) or len(firstname)>20:
+            return {
+                'status': 400,
+                'error': 'Lastname cannot be integers,have white spaces or symbols and less than 20 characters'
+            }   
         if not othernames or not type(othernames) == str:
             return {
                 'status': 400,
                 'error': 'othernames field should be a string'
             }
-     
+        if not re.match(r"^([a-zA-Z\d]+[-_])*[a-zA-Z\d*]+$", othernames) or len(firstname)>20:
+            return {
+                'status': 400,
+                'error': 'Othername cannot be integers,have white spaces or symbols'
+            }     
         if not email or not type(email) == str or email == "" or \
-        not re.match(r"[^@.]+@[A-Za-z]+\.[a-z]+", email):
+        not re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", email):
             return {
                 'status': 400,
                 'error': 'Email field can not be left empty, is invalid(eg: example@example.com) and should be a string'
             }
-        
         if not phone_number or phone_number == "" or not type(phone_number) == str:
             return {
                 'status': 400,
                 'error': 'phone_number field can not be left empty and should be a string!'
             }
-        
         if not username or username == "" or not type(username) == str:
             return {
                 'status': 400,
                 'error': 'Username field can not be left empty and should be a string'
             }
- 
         if not password or password == "" or not type(password) == str:
             return {
                 'status': 400,
@@ -65,7 +74,6 @@ class Validations:
         db = DatabaseConnection()
         username = db.check_username(username)
         email = db.check_email(email)
-
         if username != None:
             return {
                 'status': 409,
@@ -94,42 +102,28 @@ class Login_validation:
                 'status': 400,
                 'error': 'Username field can not be left empty and should be a string'
             }
-
         if not password or password == "" or not type(password) == str:
             return {
                 'status': 400,
                 'error': 'Password field can not be left empty and should be a string'
             }
 
+
 class Incident_validation:
     '''Class handles all incident validations'''
-    def add_incident_validation(self, createdby,location, status, image, video, comment):
+    def add_incident_validation(self,location, status, image, video, comment):
         '''Method that validate all the incident input from the user'''
-        # if not createdby or not isinstance(createdby, int):
-        if not createdby or not isinstance(createdby, int):
-            return {
-                'status': 400,
-                'error': 'createdby field can not be left empty and should be an integer'
-                }
-    
         if not location or location =="" or not isinstance(location, list) or not len(location)==2 or not isinstance(location[0], float)\
          or not isinstance(location[1], float):
             return {
                 'status': 400,
                 'error': 'location field can not be left empty and should be a list'
             }
-        
         if not comment or not isinstance(comment, str) :
             return {
                 'status': 400,
                 'error': 'comment field can not be left empty and should be a string'
             }
-    
-        # if not status or status == "" or not status == "delivered" or not isinstance(status, str):
-        #     return {
-        #         'status': 400,
-        #         'error':'status field can not be left empty, it should be delivered and must be a string'
-        #     }
         
         extensions = [".jpg", ".png"]
         details = os.path.splitext(image)

@@ -36,36 +36,67 @@ class DatabaseConnection:
             pprint('Connected to the database '+ self.db_name +' successfully')
 
 
-            create_user_table = "CREATE TABLE IF NOT EXISTS users (user_id SERIAL NOT NULL PRIMARY KEY,firstname TEXT NOT NULL, lastname TEXT NOT NULL, othernames TEXT NOT NULL, email TEXT NOT NULL, phone_number TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL, registered TEXT NOT NULL, isadmin BOOL DEFAULT FALSE);"
+            create_user_table = "CREATE TABLE IF NOT EXISTS users (user_id SERIAL NOT NULL PRIMARY KEY,\
+            firstname TEXT NOT NULL,\
+             lastname TEXT NOT NULL, \
+             othernames TEXT NOT NULL, \
+             email TEXT NOT NULL, \
+             phone_number TEXT NOT NULL, \
+             username TEXT NOT NULL, \
+             password TEXT NOT NULL, \
+             registered TIMESTAMP DEFAULT CURRENT_TIMESTAMP, \
+             isadmin BOOL DEFAULT FALSE);"
             self.cursor.execute(create_user_table)
 
-            create_incident_table = "CREATE TABLE IF NOT EXISTS incidents (incident_id SERIAL NOT NULL PRIMARY KEY,createdOn TEXT NOT NULL, createdBy TEXT NOT NULL, incType TEXT NOT NULL, location TEXT NOT NULL, status TEXT NOT NULL, image TEXT NOT NULL, video TEXT NOT NULL, comment TEXT NOT NULL);"
+            create_incident_table = "CREATE TABLE IF NOT EXISTS incidents (incident_id SERIAL NOT NULL PRIMARY KEY,\
+            createdOn TEXT NOT NULL, \
+            createdBy INT NOT NULL, \
+            incType TEXT NOT NULL, \
+            location TEXT NOT NULL, \
+            status TEXT NOT NULL, \
+            image TEXT NOT NULL, \
+            video TEXT NOT NULL, \
+            comment TEXT NOT NULL);"
             self.cursor.execute(create_incident_table)
 
-            create_intervention_table = "CREATE TABLE IF NOT EXISTS interventions (intervention_id SERIAL NOT NULL PRIMARY KEY,createdOn TEXT NOT NULL, createdBy TEXT NOT NULL, incType TEXT NOT NULL, location TEXT NOT NULL, status TEXT NOT NULL, image TEXT NOT NULL, video TEXT NOT NULL, comment TEXT NOT NULL);"
+            create_intervention_table = "CREATE TABLE IF NOT EXISTS interventions (intervention_id SERIAL NOT NULL PRIMARY KEY,\
+            createdOn TEXT NOT NULL, \
+            createdBy INT NOT NULL, \
+            incType TEXT NOT NULL, \
+            location TEXT NOT NULL, \
+            status TEXT NOT NULL, \
+            image TEXT NOT NULL, \
+            video TEXT NOT NULL, \
+            comment TEXT NOT NULL);"
             self.cursor.execute(create_intervention_table)
         except:
             pprint('Failed to connect to the database')
 
-    def user_signup(self, firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin):
+
+    def user_signup(self, firstname, lastname, othernames, email, phone_number, username, password, isadmin):
         '''Function to insert a user into users table'''
-        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin) VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}','{registered}', 'False') RETURNING user_id,firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin;"
+        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, isadmin)\
+         VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}', 'False') \
+         RETURNING user_id,firstname, lastname, othernames, email, phone_number, username, password, isadmin;"
         # pprint(query)
         self.cursor.execute(query)
         user = self.cursor.fetchone()
         return user
 
-    def admin_signup(self, firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin):
+    def admin_signup(self, firstname, lastname, othernames, email, phone_number, username, password, isadmin):
         '''Function to insert a admin into users table'''
-        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin) VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}','{registered}', 'True') RETURNING user_id,firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin;"
+        query = f"INSERT INTO users(firstname, lastname, othernames, email, phone_number, username, password, isadmin) \
+        VALUES('{firstname}', '{lastname}', '{othernames}', '{email}', '{phone_number}','{username}', '{password}', 'True') \
+        RETURNING user_id,firstname, lastname, othernames, email, phone_number, username, password, registered, isadmin;"
         # pprint(query)
         self.cursor.execute(query)
         user = self.cursor.fetchone()
         return user
 
-    def query_one_user(self, username):
+
+    def query_one_user(self, user_id):
         '''Function to search a user into users table'''
-        query = f"SELECT * FROM users WHERE username = '{username}';"
+        query = f"SELECT * FROM users WHERE user_id = '{user_id}';"
         pprint(query)
         self.cursor.execute(query)
         user= self.cursor.fetchone()
