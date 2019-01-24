@@ -689,6 +689,34 @@ class Test_User(BaseTest):
         self.assertIn("Wrong username or password", reply['error'])
         self.assertEqual(response.status_code, 400)
 
+    def test_get_all_users(self):
+        account = {
+            "email": "kelly1212@example.com",
+            "firstname": "mary",
+            "isadmin": False,
+            "lastname": "grace",
+            "othernames": "kelly",
+            "password": "password",
+            "phone_number": "07512345678",
+            "registered": "24-12-2018",
+            "username": "kellyma1212"
+        }
+
+        response = self.tester.post(
+            '/api/v1/signup/', content_type ='application/json',
+            data=json.dumps(account)
+        )
+        reply = json.loads(response.data.decode())
+
+        print(response.data)
+        self.assertIn("mary has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        response = self.tester.get(
+            '/api/v1/users/', content_type ='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+
     def tearDown(self):
         self.db.drop_table('users')
 

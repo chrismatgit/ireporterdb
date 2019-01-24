@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, Blueprint
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from api.Utilities.validations import Incident_validation
-from api.Controllers.user_controller import signup, admin_signup, login
+from api.Controllers.user_controller import signup, admin_signup, login, get_all_users
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
 from api.Controllers.intervention_controller import create_intervention, get_unique_intervention, get_all_interventions, \
@@ -29,6 +29,11 @@ def admin_user_signup():
 def user_login():
     response = login()
     return response
+
+@bp.route('/users/', methods=['GET']) 
+def get_users():
+   response = get_all_users()
+   return response
 
 ####################red-flags routes######################
 
