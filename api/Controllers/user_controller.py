@@ -131,3 +131,41 @@ def login():
             'status': 400,
             'error': 'Something went wrong with your inputs'
         }), 400
+
+def get_all_users():
+    ''' Function enables the view of all the users
+    :returns:
+    A list of all the account created
+    '''
+    try: 
+        if not db.query_all("users"):
+            return jsonify({
+                'status': 404,
+                'error': 'There are no user yet'
+            }), 404
+        accounts = db.query_all("users")
+        for account in accounts:
+            account_dict = {
+                "user_id": account["user_id"],
+                "firstname": account["firstname"],
+                "lastname": account["lastname"],
+                "othernames": account["othernames"],
+                "email": account["email"],
+                "phone_number": account["phone_number"],
+                "username": account["username"],
+                "password": account["password"],
+                "registered": account["registered"],
+                "isadmin": account["isadmin"]
+            }
+            User.accounts.append(account_dict)
+        return jsonify({
+            'status': 200,
+            'Data': User.accounts,
+            'message': 'Accounts fetched'
+        }), 200
+
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'something went wrong'
+        }), 400
