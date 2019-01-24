@@ -104,3 +104,39 @@ def get_all_interventions():
         'data': Intervention.reports,
         'message': 'Interventions Fetched'
     })
+
+def update_intervention_loc(intervention_id):
+    ''' Function enables the user to update a single intervention record location
+    :param:
+    incident_id - holds integer value of the id of the individual intervention to be updated
+    :returns:
+    A success message and the Details of the intervention whose id matches the one entered and update the location if the incType equal red-flag.
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty_intervention()
+    not_exist = validator.check_if_intervention_exist(intervention_id)
+    if no_data:
+        return no_data 
+    if not_exist: 
+        return not_exist
+    try:
+        data = request.get_json()
+        location = data.get("location")
+        val = validator.validate_red_flag_location(location)
+        if val:
+            return jsonify(val), 400
+            
+        update_loc = db.update_intervention("interventions", "location", location, "intervention_id", intervention_id)
+        user_data=db.query_one_intervention(intervention_id)
+        return jsonify({
+            'status': 200,
+            'id': update_loc['intervention_id'],
+            'data': user_data,
+            'message': 'location updated successfully'
+        }), 200  
+
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong with your inputs or check your id in the URL'
+        }), 400
