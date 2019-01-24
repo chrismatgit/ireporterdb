@@ -707,6 +707,39 @@ class Test_Incident(BaseTest):
         self.assertIn(reply["error"], "status field can not be left empty, it should be eg: resolved, under_investigation or rejected and should be a string")
         self.assertEqual(response.status_code, 400)
 
+    def test_delete_a_redflag(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+
+        response = self.tester.post(
+            '/api/v1/intervention/', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        response = self.tester.delete(
+            '/api/v1/intervention/1', content_type='application/json',
+            data = json.dumps(report), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn(reply["message"], "Intervention deleted")
+        self.assertEqual(response.status_code, 200)
+
+
 
     def tearDown(self):
         self.db.drop_table('interventions')

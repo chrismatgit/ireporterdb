@@ -5,7 +5,7 @@ from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
 from api.Controllers.intervention_controller import create_intervention, get_unique_intervention, get_all_interventions, \
-update_intervention_loc, update_intervention_com, update_intervention_status
+update_intervention_loc, update_intervention_com, update_intervention_status, delete_intervention
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -125,3 +125,16 @@ def update_intervention_stat(intervention_id):
         }) , 401 
     response = update_intervention_status(intervention_id)
     return response
+
+@bp.route('/intervention/<int:intervention>', methods=['DELETE'])
+@jwt_required
+def delete_a_unique_intervention(intervention):
+    response = delete_intervention(intervention)
+    return response
+
+@bp.app_errorhandler(404)
+def page_not_found(e):
+    return jsonify({
+      'issue': 'you have entered an unknown URL',
+      'message': 'Please contact us for more details'
+    }), 404
