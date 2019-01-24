@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=develop)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=test)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=test)           [![Maintainability](https://api.codeclimate.com/v1/badges/7b9d7da2259084c82395/maintainability)](https://codeclimate.com/github/chrismatgit/ireporterdb/maintainability)
+[![Build Status](https://travis-ci.org/chrismatgit/ireporterdb.svg?branch=develop)](https://travis-ci.org/chrismatgit/ireporterdb)             [![Coverage Status](https://coveralls.io/repos/github/chrismatgit/ireporterdb/badge.svg?branch=develop)](https://coveralls.io/github/chrismatgit/ireporterdb?branch=develop)           [![Maintainability](https://api.codeclimate.com/v1/badges/7b9d7da2259084c82395/maintainability)](https://codeclimate.com/github/chrismatgit/ireporterdb/maintainability)
 
 
 # iReporterdb
@@ -11,9 +11,6 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 
 You can clone the project using the link [Github repository] (https://github.com/chrismatgit/ireporterdb.git) .
 
-<!-- ## Prerequisites
-
-The UI pages do not need much to be viewed as any web browser can view them from [this site](https://) as long as they have internet access. Please note that the UI is static at the moment as work is underway to connect the back-end to it. -->
 
 ## Installing
 
@@ -39,17 +36,25 @@ The UI pages do not need much to be viewed as any web browser can view them from
 ## Endpoints
 HTTP Method | Endpoint | Functionality | Parameters | Protected
 ----------- | -------- | ------------- | ---------- | ---------
-POST | /signup/ | Create a user | None | False
-POST | /login/ | Login a user | None | False
+POST | /auth/signup | Create a user | None | False
+POST | /auth/signup/admin | Create a admin | None | False
+POST | /auth/login | Login a user | None | False
 GET | /welcome | Welcome a user | None | True
-PATCH | /user/promote/int:user_id | Promote a user as an admin| user_id | False
-GET | /users/ | Fetch all users | None | False
-POST | /incident/ | Create an incident | None | False
-GET | /incidents/int:incident_id | Fetch a single incident record | incident_id | False
-GET | /incidents/| Fetch all incident records | None | False
-PATCH | /incidents/incident_id/comment| Update a comment of a single incident record | None | False
-PATCH | /incidents/incident_id/location| Update a location of a single incident record | None | False
-DELETE | /incidents/incident_id| Delete a single incident record | incident_id | False
+GET | /users | Fetch all users | None | False
+POST | /red-flags | Create a red-flag | None | True
+GET | /red-flags/int:incident_id | Fetch a single red-flags record | incident_id | True
+GET | /red-flags/| Fetch all red-flags records | None | True
+PATCH | /red-flags/incident_id/comment| Update a comment of a single red-flag record | None | True
+PATCH | /red-flags/incident_id/location| Update a location of a single red-flag record | None | True
+PATCH | /red-flags/incident_id/status| Update a status of a single red-flag record | None | True
+DELETE | /red-flag/incident_id| Delete a single red-flag record | incident_id | True
+POST | /interventions | Create a intervention | None | True
+GET | /interventions/int:intervention_id | Fetch a single interventions record | intervention_id | True
+GET | /interventions/| Fetch all interventions records | None | True
+PATCH | /interventions/intervention_id/comment| Update a comment of a single intervention record | None | True
+PATCH | /interventions/intervention_id/location| Update a location of a single intervention record | None | True
+PATCH | //interventions/int:intervention_id/status| Update a status of a single intervention record | None | True
+DELETE | /intervention/intervention_id| Delete a single red-flag record | intervention_id | True
 
 
 ## Running the tests

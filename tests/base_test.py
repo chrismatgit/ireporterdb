@@ -15,17 +15,7 @@ class BaseTest(unittest.TestCase):
 
     def login_user(self):
         """Base method for logging in a user"""
-
         account = {
-            # "email": "admin@example.com",
-            # "firstname": "admin",
-            # "isAdmin": False,
-            # "lastname": "admin",
-            # "othernames": "admin",
-            # "password": "admin123",
-            # "phone_number": "07512345678",
-            # "registered": "12-12-2018",
-            # "username": "admin"
             "email": "kelly1212@example.com",
             "firstname": "mary",
             "isadmin": True,
@@ -37,22 +27,18 @@ class BaseTest(unittest.TestCase):
             "username": "kellyma1212"
         }
         response = self.tester.post(
-            '/api/v1/signup/admin',
+            '/api/v1/auth/signup/admin',
             content_type='application/json',
             data=json.dumps(account)
         )
-
         account = dict(
             username='kellyma1212',
             password='password'
         )
-
         response = self.tester.post(
-            '/api/v1/login/',
+            '/api/v1/auth/login',
             content_type='application/json',
             data=json.dumps(account)
         )
-
         reply = json.loads(response.data.decode())
-
         return reply

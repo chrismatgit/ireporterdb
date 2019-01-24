@@ -13,35 +13,30 @@ def create_intervention():
     a success message and the intervention.
     '''
     try:
-        # current_user = get_jwt_identity()
+        current_user = get_jwt_identity()
         data = request.get_json()
-        #incident_id = len(Incident.reports)+1
         createdon = datetime.datetime.now()
-        # createdby = current_user
-        createdby = data.get("createdby")
+        createdby = current_user
         inctype = data.get("inctype")
         location = data.get("location")
         status = "delivered"
         image = data.get("image")
         video = data.get("video")
         comment = data.get("comment")
-
         # validation
         validator = Incident_validation()
-        invalid_data = validator.add_incident_validation(createdby,location,status,image,video,comment)
+        invalid_data = validator.add_incident_validation(location,status,image,video,comment)
         invalid_status = validator.validate_intervention_type(inctype)
         if invalid_status:
             return jsonify(invalid_status), 400 
         if invalid_data:
             return jsonify(invalid_data), 400
-
         new_intervention = db.insert_intervention(createdon, createdby, inctype, location, status, image, video, comment)
         return jsonify({
             "status": 201,
             "data": new_intervention,
             "message": f"{inctype} has been created successfuly"
         }), 201
-
     except Exception:
         return jsonify({
             'status': 400,
@@ -62,18 +57,12 @@ def get_unique_intervention(intervention_id):
         return no_data 
     if not_exist: 
         return not_exist
-    try:
-        interv = db.query_one_intervention(intervention_id)
-        return jsonify({
-            'status': 200,
-            'data': interv,
-            'message': 'Intervention Fetched'
-            }), 200
-    except Exception:
-        return jsonify({
-            'status': 400,
-            'error': 'Something went wrong'
-        }), 400
+    interv = db.query_one_intervention(intervention_id)
+    return jsonify({
+        'status': 200,
+        'data': interv,
+        'message': 'Intervention Fetched'
+        }), 200
 
 def get_all_interventions():
     ''' Function enables the view of all the interventions
@@ -103,7 +92,7 @@ def get_all_interventions():
         'status': 200,
         'data': Intervention.reports,
         'message': 'Interventions Fetched'
-    })
+        })
 
 def update_intervention_loc(intervention_id):
     ''' Function enables the user to update a single intervention record location
@@ -124,8 +113,7 @@ def update_intervention_loc(intervention_id):
         location = data.get("location")
         val = validator.validate_red_flag_location(location)
         if val:
-            return jsonify(val), 400
-            
+            return jsonify(val), 400         
         update_loc = db.update_intervention("interventions", "location", location, "intervention_id", intervention_id)
         user_data=db.query_one_intervention(intervention_id)
         return jsonify({
@@ -134,7 +122,6 @@ def update_intervention_loc(intervention_id):
             'data': user_data,
             'message': 'location updated successfully'
         }), 200  
-
     except Exception:
         return jsonify({
             'status': 400,
@@ -183,14 +170,14 @@ def update_intervention_status(intervention_id):
     :returns:
     the success message and the Details of the incident whose id matches the one entered to be updated.
     '''
-    validator = Incident_validation()
-    no_data = validator.check_if_empty_intervention()
-    not_exist = validator.check_if_intervention_exist(intervention_id)
-    if no_data:
-        return no_data 
-    if not_exist: 
-        return not_exist
     try:
+        validator = Incident_validation()
+        no_data = validator.check_if_empty_intervention()
+        not_exist = validator.check_if_intervention_exist(intervention_id)
+        if no_data:
+            return no_data 
+        if not_exist: 
+            return not_exist
         data = request.get_json()
         status = data.get("status")
         val = Incident_validation.validate_status(status)

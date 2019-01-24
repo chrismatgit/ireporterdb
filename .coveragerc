@@ -9,5 +9,6 @@ omit =
     */usr/lib/python3/*
     tests/*
     */models.py
+    */api/Models/*
     
     
