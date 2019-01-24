@@ -175,3 +175,38 @@ def update_intervention_com(intervention_id):
             'status': 400,
             'error': 'Something went wrong with your inputs or check your id in the URL'
         }), 400
+
+def update_intervention_status(intervention_id):
+    ''' Function enables a user to update a single intervention record status
+    :param:
+    incident_id - holds integer value of the id of the individual intervention to be updated
+    :returns:
+    the success message and the Details of the incident whose id matches the one entered to be updated.
+    '''
+    validator = Incident_validation()
+    no_data = validator.check_if_empty_intervention()
+    not_exist = validator.check_if_intervention_exist(intervention_id)
+    if no_data:
+        return no_data 
+    if not_exist: 
+        return not_exist
+    try:
+        data = request.get_json()
+        status = data.get("status")
+        val = Incident_validation.validate_status(status)
+        if not val:
+            updated_incident= db.update_intervention("interventions", "status", status, "intervention_id", intervention_id)
+            user_data=db.query_one_intervention(intervention_id)
+            return jsonify({
+                'status': 200,
+                'id': updated_incident['intervention_id'],
+                'data': user_data,
+                'message': 'status updated successfully'
+            })
+        else:
+            return jsonify(val), 400
+    except Exception:
+        return jsonify({
+            'status': 400,
+            'error': 'Something went wrong with your inputs or check your id in the URL'
+        }), 400

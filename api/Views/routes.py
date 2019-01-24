@@ -5,7 +5,7 @@ from api.Controllers.user_controller import signup, admin_signup, login
 from api.Controllers.incident_controller import create_incident, get_unique_red_flag, get_all_red_flags, update_red_flag_loc\
 ,update_red_flag_com, delete_red_flag, update_red_flag_status
 from api.Controllers.intervention_controller import create_intervention, get_unique_intervention, get_all_interventions, \
-update_intervention_loc, update_intervention_com
+update_intervention_loc, update_intervention_com, update_intervention_status
 from db import DatabaseConnection
 
 db = DatabaseConnection()
@@ -29,6 +29,8 @@ def admin_user_signup():
 def user_login():
     response = login()
     return response
+
+####################red-flags routes######################
 
 @bp.route('/red_flag/', methods=['POST'])
 @jwt_required
@@ -109,4 +111,17 @@ def update_interv_location(intervention_id):
 @jwt_required
 def update_interv_comment(intervention_id):
     response = update_intervention_com(intervention_id)
+    return response
+
+@bp.route('/intervention/<int:intervention_id>/status', methods=['PATCH'])
+@jwt_required
+def update_intervention_stat(intervention_id):
+    current_user=get_jwt_identity()
+    user_data = db.query_one_user(current_user)
+    if not user_data['isadmin']:
+        return jsonify({
+            "status": 401,
+            "error": "Non admin user are not allowed"
+        }) , 401 
+    response = update_intervention_status(intervention_id)
     return response
