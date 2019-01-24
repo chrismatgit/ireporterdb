@@ -292,30 +292,6 @@ class Test_User(BaseTest):
         self.assertIn("Lastname field can not be left empty and should be a string", reply['error'])
         self.assertEqual(response.status_code, 400)
 
-    def test_empty_othername(self):
-        account = {
-            "email": "kelly1212@example.com",
-            "firstname": "mary",
-            "isadmin": False,
-            "lastname": "grace",
-            "othernames": "",
-            "password": "password",
-            "phone_number": "07512345678",
-            "registered": "24-12-2018",
-            "username": "kellyma1212"
-        }
-
-        response = self.tester.post(
-            '/api/v1/signup/', content_type ='application/json',
-            data=json.dumps(account)
-        )
-        reply = json.loads(response.data.decode())
-
-        print(response.data)
-        self.assertIn("othernames field can not be left empty and should be a string", reply['error'])
-        self.assertEqual(response.status_code, 400)
-
-
     def test_orthername_is_not_string(self):
         account = {
             "email": "kelly1212@example.com",
@@ -336,7 +312,7 @@ class Test_User(BaseTest):
         reply = json.loads(response.data.decode())
 
         print(response.data)
-        self.assertIn("othernames field can not be left empty and should be a string", reply['error'])
+        self.assertIn("othernames field should be a string", reply['error'])
         self.assertEqual(response.status_code, 400)
 
 
