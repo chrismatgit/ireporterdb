@@ -425,20 +425,6 @@ class Test_User(BaseTest):
         self.assertIn("kellyma1212 successfuly login", reply['message'])
         self.assertEqual(response.status_code, 200)
 
-    def test_login_when_no_user(self):
-        login_info = {
-            "username": "kellyma1212",
-            "password": "password"
-        }
-        response = self.tester.post(
-            '/api/v1/auth/login', content_type ='application/json',
-            data=json.dumps(login_info)
-        )
-        reply = json.loads(response.data.decode())
-        self.assertIn("Wrong username or password", reply['error'])
-        self.assertEqual(response.status_code, 400)
-
-
     def test_login_username_is_empty(self):
         account = {
             "email": "kelly1212@example.com",

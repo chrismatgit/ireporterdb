@@ -513,6 +513,68 @@ class Test_Incident(BaseTest):
         self.assertIn(reply["error"], "location field can not be left empty and should be a list")
         self.assertEqual(response.status_code, 400)
 
+    def test_update_location_with_invalid_id(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_location = { "location": [121121.3,1221.5]}
+        response = self.tester.patch(
+            '/api/v1/red-flags/12/location', content_type='application/json',
+            data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Please red-flag does not exit or check your id")
+        self.assertEqual(response.status_code, 404)
+
+    def test_update_location_with_wrong_input(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_location = [{ "location": [121121.3,1221.5]}]
+        response = self.tester.patch(
+            '/api/v1/red-flags/12/location', content_type='application/json',
+            data = json.dumps(update_location), headers = {'Authorization':f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Please red-flag does not exit or check your id")
+        self.assertEqual(response.status_code, 404)
+        
     def test_update_location_is_not_string(self):
         reply = self.login_user()
         token = reply['token']
@@ -542,6 +604,37 @@ class Test_Incident(BaseTest):
         reply = json.loads(response.data.decode())
         self.assertIn(reply["error"], "location field can not be left empty and should be a list")
         self.assertEqual(response.status_code, 400)
+
+    def test_update_comment_is_valid(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_comment = { "comment": "new comment"}
+        response = self.tester.patch(
+            '/api/v1/red-flags/1/comment', content_type='application/json',
+            data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["message"], "comment updated successfully")
+        self.assertEqual(response.status_code, 200)
+
 
     def test_update_comment_is_empty(self):
         reply = self.login_user()
@@ -573,6 +666,36 @@ class Test_Incident(BaseTest):
         self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
         self.assertEqual(response.status_code, 400)
 
+    def test_update_comment_with_invalid_id(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_comment = { "comment": "comment"}
+        response = self.tester.patch(
+            '/api/v1/red-flags/12/comment', content_type='application/json',
+            data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Please red-flag does not exit or check your id")
+        self.assertEqual(response.status_code, 404)
+
     def test_update_comment_is_not_string(self):
         reply = self.login_user()
         token = reply['token']
@@ -603,6 +726,37 @@ class Test_Incident(BaseTest):
         self.assertIn(reply["error"], "comment field can not be left empty and should be a string")
         self.assertEqual(response.status_code, 400)
 
+    def test_update_comment_with_wrong_input(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+
+        update_comment = [{ "comment": False}]
+        response = self.tester.patch(
+            '/api/v1/red-flags/1/comment', content_type='application/json',
+            data = json.dumps(update_comment), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Something went wrong with your inputs or check your id in the URL")
+        self.assertEqual(response.status_code, 400)
+
+
     def test_delete_a_redflag(self):
         reply = self.login_user()
         token = reply['token']
@@ -631,6 +785,97 @@ class Test_Incident(BaseTest):
         reply = json.loads(response.data.decode())
         self.assertIn(reply["message"], "incident deleted")
         self.assertEqual(response.status_code, 200)
+
+    def test_update_status_with_wrong_input(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "intervention",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/interventions', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("intervention has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+        update_status = { "status": False}
+        response = self.tester.patch(
+            '/api/v1/interventions/1/status', content_type='application/json',
+            data = json.dumps(update_status), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "status field can not be left empty, it should be eg: resolved, under_investigation or rejected and should be a string")
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_status_with_wrong_input_(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+        update_status = [{ "status": "rejected"}]
+        response = self.tester.patch(
+            '/api/v1/red-flags/1/status', content_type='application/json',
+            data = json.dumps(update_status), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Something went wrong with your inputs or check your id in the URL")
+        self.assertEqual(response.status_code, 400)
+
+    
+    def test_update_status_with_wrong_id(self):
+        reply = self.login_user()
+        token = reply['token']
+        report = {
+            "comment": "No comment",
+            "createdby": 1,
+            "createdon": "Thu, 13 Dec 2018 08:33:24 GMT",
+            "image": "img.jpg",
+            "inctype": "red-flag",
+            "location": [12112.01,12122.454],
+            "status": "under_investigation",
+            "video": "video.avi"
+        }
+        response = self.tester.post(
+            '/api/v1/red-flags', content_type='application/json',
+            data = json.dumps(report), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+     
+        self.assertIn("red-flag has been created successfuly", reply['message'])
+        self.assertEqual(response.status_code, 201)
+        update_status = { "status": "rejected"}
+        response = self.tester.patch(
+            '/api/v1/red-flags/12/status', content_type='application/json',
+            data = json.dumps(update_status), headers={'Authorization': f'Bearer {token}'}
+        )
+        reply = json.loads(response.data.decode())
+        self.assertIn(reply["error"], "Please red-flag does not exit or check your id")
+        self.assertEqual(response.status_code, 404)
 
     def tearDown(self):
         self.db.drop_table('incidents')

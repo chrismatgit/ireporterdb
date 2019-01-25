@@ -21,7 +21,7 @@ You can clone the project using the link [Github repository] (https://github.com
   ```
   Switch to the cloned directory, install a virtual environment, create a virtual environment, activate it, checkout to the most stable branch, install app dependencies and run the app.
   ```sh
-    $ cd iReporter
+    $ cd iReporterdb
     $ pip install virtualenv
     $ virtualenv -p python3 venv
     $ source venv/bin/activate
